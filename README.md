@@ -4,6 +4,10 @@
 [![Language](https://img.shields.io/badge/Language-C++%20/%20QML-blue.svg?style=flat-square&logo=c%2B%2B)](https://cplusplus.com/)
 [![Platform](https://img.shields.io/badge/Platform-Windows%20%7C%20macOS-lightgrey.svg?style=flat-square&logo=windows)](https://microsoft.com/)
 
+<p align="center">
+  <img src="assets/Cat Blushing GIF.gif" width="250" alt="Cat Blushing"/>
+</p>
+
 Một dự án game đua xe tránh chướng ngại vật 2D hiện đại được phát triển bằng ngôn ngữ **C++** cho phần xử lý logic cốt lõi (Engine) kết hợp với **QML (Qt Quick)** cho phần giao diện mượt mà và hiệu ứng âm thanh sống động thông qua **Qt Multimedia**.
 
 ---
