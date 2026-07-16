@@ -1,90 +1,167 @@
 import QtQuick
-import QtQuick.Layouts
-import QtQuick.Controls.Basic
-
+import QtQuick.Controls
+import QtQuick 2.15
+import QtMultimedia
 
 ApplicationWindow {
     id: window
-    width: 640
-    height: 480
-    minimumWidth: 200
-    minimumHeight: 250
     visible: true
-    title: qsTr("Hello World")
-    property bool lightMode: Application.styleHints.colorScheme === Qt.Light
-    property color reallyDark: "#1f1f1f"
-    property color dark: "#262626"
-    property color reallyLight: "#e7e7e7"
-    property color light: "#e0e0e0"
 
-    GridLayout {
-        id: grid
-        columns: width < 400 ? 1 : 2
-        rowSpacing: 0
-        columnSpacing: 0
+    width: 450
+    height: 700
+
+    minimumWidth: 450
+    minimumHeight: 700
+    maximumWidth: 450
+    maximumHeight: 700
+
+    title: qsTr("Car Game Racing")
+
+    MenuView {
+        id: menuView
         anchors.fill: parent
+        visible: true // Mới mở app lên thì Menu hiện
 
-        Rectangle {
-            id: rectangle1
-            color: window.lightMode ? window.reallyLight : window.reallyDark
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+        onStartGame: {
+            menuView.visible = false // Ẩn Menu
+            gameView.visible = true  // Hiện Game
+            gameEngine.startGame()   // Báo C++ reset điểm, sinh xe
 
-            ColumnLayout {
-                anchors.fill: parent
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+            // 🌟 ĐỒNG BỘ NHẠC: Reset nhạc về bài đầu tiên khi bắt đầu ván mới hoàn toàn từ Menu
+            bgMusic.currentMusicIndex = 0
+            bgMusic.playRandomMusic()
 
-                Label {
-                    id: text1
-                    color: window.lightMode ? window.dark : window.light
-                    font.pixelSize: 120
-                    fontSizeMode: Text.Fit
-                    text: qsTr("Hello World")
-                    Layout.fillWidth: true
-                    Layout.fillHeight: true
-                    Layout.margins: 16
-                    horizontalAlignment: Text.AlignHCenter
-                    verticalAlignment: Text.AlignVCenter
-                }
-            }
+            // ĐỒNG BỘ: Reset số xu về 0 khi người chơi bắt đầu ván mới từ Menu
+            gameView.currentCoins = 0
+        }
+    }
+
+    // --- MÀN HÌNH GAME ---
+    GameView {
+        id: gameView
+        anchors.fill: parent
+        visible: false // Mới mở app lên thì Game ẩn
+
+        // BẮT TÍN HIỆU ĐƯỢC PHÁT RA TỪ NÚT EXIT Ở BƯỚC TRƯỚC
+        onReturnToMenu: {
+            gameView.visible = false // Ẩn Game
+            menuView.visible = true  // Hiện Menu lại
+        }
+        onRestartRequested: {
+            bgMusic.play()
+        }
+        onShieldActivated: {
+            shieldActivateSound.play()
         }
 
-        Rectangle {
-            id: rectangle2
-            color: window.lightMode ? window.light : window.dark
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+        onShieldDeactivated: {
+            shieldEndSound.play()
+            // Trả âm lượng nhạc nền về bình thường
+            bgMusic.audioOutput.volume = 0.7
+        }
+    }
 
-            ColumnLayout {
-                anchors.fill: parent
-                Layout.alignment: Qt.AlignHCenter | Qt.AlignTop
+    // ==========================================
+    // 🎵 HỆ THỐNG ÂM THANH (AUDIO SYSTEM)
+    // ==========================================
+    MediaPlayer {
+        id: bgMusic
 
-                Button {
-                    id: button1
-                    text: window.lightMode ? qsTr("\u263D  Dark mode")
-                                           : qsTr("\u263C  Light mode")
-                    Layout.bottomMargin: 16
-                    Layout.alignment: Qt.AlignHCenter | Qt.AlignBottom
+        // 🌟 1. KHAI BÁO PLAYLIST: Fen thêm các bài nhạc của fen vào mảng này nhé
+        property var bgPlaylist: [
+            "sounds/game.wav",
+             "sounds/game2.mp3"
+        ]
+        property int currentMusicIndex: 0 // Chỉ số bài nhạc đang phát
 
-                    contentItem: Text {
-                        text: button1.text
-                        color: window.lightMode ? window.light : window.dark
-                        font: button1.font
-                        horizontalAlignment: Text.AlignHCenter
-                        verticalAlignment: Text.AlignVCenter
+        function playRandomMusic() {
+            currentMusicIndex = Math.floor(Math.random() * bgPlaylist.length);
+            source = bgPlaylist[currentMusicIndex];
+            play();
+        }
+
+        // Lấy nguồn nhạc động dựa vào chỉ số hiện tại
+        source: bgPlaylist[currentMusicIndex]
+
+        audioOutput: AudioOutput {
+            id: bgAudioOutput
+            volume: 0.7
+        }
+
+        // 🌟 2. SỬA TẠI ĐÂY: Để bằng 1 (phát hết bài thì dừng) để hệ thống nhận biết được EndOfMedia
+        loops: 1
+
+        // 🌟 3. TỰ ĐỘNG ĐỔI BÀI KHI HẾT NHẠC
+        onMediaStatusChanged: {
+            if (mediaStatus === MediaPlayer.EndOfMedia) {
+                console.log("Hết bài rồi, đang xào bài ngẫu nhiên...")
+
+                // Kiểm tra nếu danh sách có từ 2 bài trở lên thì mới cần né bài trùng
+                if (bgPlaylist.length > 1) {
+                    let nextIndex = currentMusicIndex;
+
+                    // Vòng lặp này chạy cho đến khi tìm được một con số khác số cũ
+                    while (nextIndex === currentMusicIndex) {
+                        nextIndex = Math.floor(Math.random() * bgPlaylist.length);
                     }
-
-                    background: Rectangle {
-                        implicitWidth: 120
-                        implicitHeight: 36
-                        radius: 8
-                        color: window.lightMode ? window.dark : window.light
-                    }
-
-                    onClicked: window.lightMode = !window.lightMode
+                    currentMusicIndex = nextIndex;
+                } else {
+                    currentMusicIndex = 0;
                 }
+
+                // Nạp bài mới đã được random và quẩy tiếp
+                source = bgPlaylist[currentMusicIndex]
+                play()
             }
         }
     }
 
+    MediaPlayer {
+        id: coinSound
+        source: "sounds/coin.mp3"
+        audioOutput: AudioOutput {
+            volume: 1.0
+        }
+    }
+
+    SoundEffect {
+        id: crashSound
+        source: "sounds/crash.wav" // SoundEffect xài .wav là chuẩn bài!
+        volume: 1.0
+    }
+
+    // Chuyển mp3 sang MediaPlayer, xóa thẻ Audio dư thừa
+    MediaPlayer {
+        id: shieldActivateSound
+        source: "sounds/up.mp3"
+        audioOutput: AudioOutput {
+            volume: 1.0
+        }
+    }
+
+    // Chuyển mp3 sang MediaPlayer
+    MediaPlayer {
+        id: shieldEndSound
+        source: "sounds/down.mp3"
+        audioOutput: AudioOutput {
+            volume: 1.0
+        }
+    }
+
+    // --- BẮT TÍN HIỆU TỪ C++ ĐỂ PHÁT NHẠC ---
+    Connections {
+        target: gameEngine
+
+        function onCoinCollected() {
+            coinSound.play()
+        }
+
+        function onCrashed() {
+            // Chỉ phát tiếng nổ và dừng nhạc nền nếu xe KHÔNG trong trạng thái bật khiên
+            if (!gameView.isShieldActive) {
+                crashSound.play()
+                bgMusic.stop()
+            }
+        }
+    }
 }

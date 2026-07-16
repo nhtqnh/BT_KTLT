@@ -1,8 +1,0 @@
-module CarGame
-typeinfo appCarGame.qmltypes
-prefer :/qt/qml/CarGame/
-Main 254.0 Main.qml
-MenuView 254.0 MenuView.qml
-GameView 254.0 GameView.qml
-depends QtQuick
-

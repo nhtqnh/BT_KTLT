@@ -1,8 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/CarGame/">
-    <file alias="Main.qml">/Users/nhtqnh/Documents/CarGame/Main.qml</file>
-    <file alias="MenuView.qml">/Users/nhtqnh/Documents/CarGame/MenuView.qml</file>
-    <file alias="GameView.qml">/Users/nhtqnh/Documents/CarGame/GameView.qml</file>
-  </qresource>
-</RCC>
-

@@ -1,2 +1,0 @@
-set(__QT_DEPLOY_TARGET_appCarGame_FILE /Users/nhtqnh/Documents/CarGame/build/Qt_6_11_1_for_macOS_Debug/appCarGame.app/Contents/MacOS/appCarGame)
-set(__QT_DEPLOY_TARGET_appCarGame_TYPE EXECUTABLE)

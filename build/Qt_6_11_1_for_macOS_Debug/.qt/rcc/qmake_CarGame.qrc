@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/qt/qml/CarGame">
-    <file alias="qmldir">/Users/nhtqnh/Documents/CarGame/build/Qt_6_11_1_for_macOS_Debug/CarGame/qmldir</file>
-  </qresource>
-</RCC>
-

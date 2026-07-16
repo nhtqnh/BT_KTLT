@@ -1,6 +1,0 @@
-<RCC>
-  <qresource prefix="/">
-    <file alias="/qt/qml/CarGame">/Users/nhtqnh/Documents/CarGame/build/Qt_6_11_1_for_macOS_Debug/CarGame</file>
-
-  </qresource>
-</RCC>

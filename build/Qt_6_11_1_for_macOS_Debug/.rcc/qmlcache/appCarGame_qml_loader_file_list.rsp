@@ -1,7 +1,0 @@
---resource
-/Users/nhtqnh/Documents/CarGame/build/Qt_6_11_1_for_macOS_Debug/.qt/rcc/qmake_CarGame.qrc
---resource
-/Users/nhtqnh/Documents/CarGame/build/Qt_6_11_1_for_macOS_Debug/.qt/rcc/appCarGame_raw_qml_0.qrc
-/qt/qml/CarGame/Main.qml
-/qt/qml/CarGame/MenuView.qml
-/qt/qml/CarGame/GameView.qml
