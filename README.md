@@ -87,10 +87,10 @@ Dưới đây là một số hình ảnh nhân vật, vật phẩm và đường
 | :---: | :---: | :---: |
 | <img src="assets/Car2.png" width="100" alt="Xe cản 1"/> | <img src="assets/Car3.png" width="100" alt="Xe cản 2"/> | <img src="assets/Car4.png" width="100" alt="Xe cản 3"/> |
 
-### 🪙 Vật phẩm & Giao diện (Items & UI)
-| Đồng xu vàng | Rào chắn đường |
-| :---: | :---: |
-| <img src="assets/coin.png" width="80" alt="Đồng xu"/> | <img src="assets/barrie.png" width="80" alt="Rào chắn"/> |
+### 🪙 Vật phẩm & Chướng ngại vật khác (Items & Other Obstacles)
+| Đồng xu vàng | Rào chắn đường | Con ngỗng (Chướng ngại vật) |
+| :---: | :---: | :---: |
+| <img src="assets/coin.png" width="80" alt="Đồng xu"/> | <img src="assets/barrie.png" width="80" alt="Rào chắn"/> | <img src="assets/Obstacle.png" width="80" alt="Con ngỗng"/> |
 
 ### 🛣️ Đường đua vô tận (Game Road Background)
 <p align="center">
