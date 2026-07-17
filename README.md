@@ -54,26 +54,46 @@ BT_KTLT/
 ├── gameengine.h / .cpp      # Logic cốt lõi: xử lý điểm số, va chạm, quản lý vật thể, Timer
 ├── car.h / .cpp             # Định nghĩa cấu trúc và trạng thái của xe người chơi
 ├── obstacle.h / .cpp        # Định nghĩa các vật cản và tiền xu di chuyển trên đường đua
-├── entity.h / .cpp          # Class cơ sở (Base Class) cho mọi thực thể trong game
-└── build_game.ps1           # Script PowerShell tự động biên dịch và đóng gói trên Windows
+└── entity.h / .cpp          # Class cơ sở (Base Class) cho mọi thực thể trong game
 ```
 
 ---
 
-## 🚀 Hướng dẫn khởi chạy Game nhanh (Bản Final)
+## 🚀 Hướng dẫn xây dựng & Khởi chạy Game (Build & Run)
 
-### 💻 Trên Windows (Chạy file `.exe`)
-Bạn không cần cài đặt môi trường hay biên dịch lại code. Bản chạy chính thức (Final Version) đã được chuẩn bị sẵn:
-1. Mở thư mục **`version Final`** nằm bên trong thư mục dự án.
-2. Kích đúp chuột vào tệp tin **`appCarGame.exe`** để mở game và trải nghiệm ngay!
-   - *Nếu gặp thông báo chặn của Windows (Smart App Control hoặc SmartScreen):*
-     Nhấp chuột phải vào file `appCarGame.exe` -> Chọn **Properties** -> Ở góc dưới cùng của tab General, tích chọn ô **Unblock** (Mở chặn) -> Nhấn **Apply** -> **OK** là có thể chạy game bình thường.
+Vì bản đóng gói sẵn đã được gỡ bỏ, bạn cần biên dịch dự án từ mã nguồn. Dưới đây là các cách thực hiện đơn giản nhất:
 
-### 🍎 Trên macOS / MacBook (Chạy file `.app`)
-> [!NOTE]
-> macOS không thể chạy trực tiếp file `.exe`. Bản chạy độc lập tương ứng trên macOS sẽ có định dạng là tệp ứng dụng `.app` (ví dụ: `appCarGame.app`).
-1. Khi có bản build dành for Mac (được đóng gói thông qua công cụ `macdeployqt`), bạn chỉ cần tìm tệp tin **`appCarGame.app`**.
-2. Kích đúp chuột để khởi chạy ứng dụng trực tiếp trên máy Mac giống như các phần mềm thông thường khác.
+### 🛠️ Cách 1: Sử dụng Qt Creator (Khuyên dùng)
+Đây là cách dễ dàng nhất trên cả Windows và macOS:
+1. Tải và cài đặt **[Qt Creator](https://www.qt.io/download)** (Đảm bảo đã cài đặt Qt 6.x trở lên cùng các thành phần `Qt Quick` và `Qt Multimedia`).
+2. Mở Qt Creator -> Chọn **Open Project** -> Tìm và chọn tệp **`CMakeLists.txt`** ở thư mục gốc của dự án.
+3. Chọn bộ Kit phù hợp (ví dụ: `Desktop Qt 6.x.x`) rồi nhấn **Configure Project**.
+4. Nhấn nút **Run** (biểu tượng tam giác màu xanh lá ở góc dưới bên trái) hoặc nhấn tổ hợp phím `Ctrl + R` (`Cmd + R` trên macOS) để tự động biên dịch và chạy game.
+
+### 💻 Cách 2: Sử dụng Dòng lệnh (Command Line với CMake)
+Yêu cầu máy tính của bạn đã cài đặt CMake, bộ công cụ biên dịch (MSVC/MinGW trên Windows, Clang trên macOS) và Qt 6.
+
+1. **Cấu hình dự án (Configure):**
+   Mở Terminal/Command Prompt tại thư mục gốc của dự án và chạy:
+   ```bash
+   cmake -B build -S .
+   ```
+   *(Nếu CMake không tự tìm thấy Qt 6, bạn cần truyền thêm tham số đường dẫn cài đặt Qt: `-DCMAKE_PREFIX_PATH="ĐƯỜNG_DẪN_QT6"`)*
+
+2. **Biên dịch dự án (Build):**
+   ```bash
+   cmake --build build --config Release
+   ```
+
+3. **Chạy ứng dụng (Run):**
+   * **Trên Windows:**
+     ```cmd
+     .\build\Release\appCarGame.exe
+     ```
+   * **Trên macOS:**
+     ```bash
+     ./build/appCarGame.app/Contents/MacOS/appCarGame
+     ```
 
 ---
 
